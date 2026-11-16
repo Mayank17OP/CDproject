@@ -65,10 +65,12 @@ Vercel auto-detects the static project thanks to [`vercel.json`](./vercel.json) 
 
 This repo ships a ready-to-go workflow at [`.github/workflows/pages.yml`](./.github/workflows/pages.yml). It runs on every push to `main` (and manually via **Actions → Deploy to GitHub Pages → Run workflow**).
 
-**One-time setup (only if the first run fails with "Pages is not enabled"):**
+**One-time setup (≈10 seconds, only needed once):**
 1. Repo → **Settings** → **Pages**
 2. **Build and deployment** → Source: **GitHub Actions** (not "Deploy from a branch")
-3. Re-run the workflow.
+3. **Actions** → *Deploy to GitHub Pages* → **Re-run all jobs** (or push any commit to `main`)
+
+> The workflow tries to enable Pages itself via `configure-pages` (`enablement: true`). GitHub only allows that when the token has admin rights, so on a fresh repo the one-time toggle above is usually required.
 
 Live URL: **https://mayank17op.github.io/CDproject/**
 
