@@ -36,11 +36,32 @@ npx serve .
 
 ## 🌐 Deploy (free, 2 minutes)
 
+This is a **pure static site** — no build step, no framework, no environment variables. Any static host works.
+
+### Vercel (recommended)
+
+**A. Dashboard — import from GitHub (no CLI needed)**
+1. Go to [vercel.com/new](https://vercel.com/new) → **Import Git Repository** → pick `Mayank17OP/CDproject`.
+2. Framework Preset: **Other**. Root Directory: `./`. Build Command: *leave empty*. Output Directory: *leave empty*.
+3. **Deploy**. Your site is live at `https://cdproject.vercel.app` (or a generated name).
+4. Pushing to `main` redeploys automatically — every branch gets its own preview URL.
+
+**B. CLI**
+
+```bash
+npm i -g vercel        # or use: npx vercel
+vercel login           # one-time browser auth
+vercel --prod          # deploy to production, prints the live URL
+```
+
+Vercel auto-detects the static project thanks to [`vercel.json`](./vercel.json) (clean URLs + security/caching headers) and [`.vercelignore`](./.vercelignore) (keeps Python files and `.git` out of the upload). No `package.json` required.
+
+### Other hosts
+
 | Platform | Steps |
 |---|---|
 | **GitHub Pages** | Push to `main` → Settings → Pages → Source: `main` / root → live at `https://mayank17op.github.io/CDproject/` |
 | **Netlify** | Drag this folder onto [Netlify Drop](https://app.netlify.com/drop) |
-| **Vercel** | `npx vercel --prod` (zero config) |
 
 ## 🧪 Tests
 
