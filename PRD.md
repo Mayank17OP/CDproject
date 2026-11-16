@@ -279,9 +279,9 @@ analyze(input: string, options: {angle:boolean, quotes:boolean})
 
 ## 11. Deployment Plan
 
-### Option A — GitHub Pages (Recommended, Free)
-1. Push to `main`.
-2. Repo → Settings → Pages → Source: `main` / root.
+### Option A — GitHub Pages (Interactive, configured in-repo)
+1. Merge to `main` (the workflow at `.github/workflows/pages.yml` deploys automatically).
+2. Repo → Settings → Pages → Source: **GitHub Actions** (one-time).
 3. Live at `https://mayank17op.github.io/CDproject/`.
 
 ### Option B — Netlify (Drag & Drop)

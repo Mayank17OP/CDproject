@@ -6,6 +6,11 @@ A free, in-browser tool that checks whether `()`, `[]`, `{}`, `<>` and quotes ar
 
 📄 Full product spec: **[PRD.md](./PRD.md)**
 
+### 🌍 Live site
+**https://mayank17op.github.io/CDproject/**
+
+[![Deploy to GitHub Pages](https://github.com/Mayank17OP/CDproject/actions/workflows/pages.yml/badge.svg)](https://github.com/Mayank17OP/CDproject/actions/workflows/pages.yml)
+
 ---
 
 ## ✨ Features
@@ -56,11 +61,23 @@ vercel --prod          # deploy to production, prints the live URL
 
 Vercel auto-detects the static project thanks to [`vercel.json`](./vercel.json) (clean URLs + security/caching headers) and [`.vercelignore`](./.vercelignore) (keeps Python files and `.git` out of the upload). No `package.json` required.
 
+### GitHub Pages (configured — auto-deploys)
+
+This repo ships a ready-to-go workflow at [`.github/workflows/pages.yml`](./.github/workflows/pages.yml). It runs on every push to `main` (and manually via **Actions → Deploy to GitHub Pages → Run workflow**).
+
+**One-time setup (only if the first run fails with "Pages is not enabled"):**
+1. Repo → **Settings** → **Pages**
+2. **Build and deployment** → Source: **GitHub Actions** (not "Deploy from a branch")
+3. Re-run the workflow.
+
+Live URL: **https://mayank17op.github.io/CDproject/**
+
+> Works from a subpath out of the box — all asset links are relative, and `.nojekyll` is added automatically by the workflow.
+
 ### Other hosts
 
 | Platform | Steps |
 |---|---|
-| **GitHub Pages** | Push to `main` → Settings → Pages → Source: `main` / root → live at `https://mayank17op.github.io/CDproject/` |
 | **Netlify** | Drag this folder onto [Netlify Drop](https://app.netlify.com/drop) |
 
 ## 🧪 Tests
