@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Balanced Parentheses &amp; Brackets Analyzer</title>
+  <meta name="description" content="Paste any text or code and instantly check if parentheses, brackets and braces are balanced — with stack visualization, error highlighting and auto-fix." />
+  <meta property="og:title" content="Balanced Parentheses & Brackets Analyzer" />
+  <meta property="og:description" content="Stack-based bracket checker with step-by-step visualization and auto-fix." />
+  <meta property="og:type" content="website" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <div class="brand">
+        <span class="logo" aria-hidden="true">{ }</span>
+        <span class="brand-text">Bracket<strong>Analyzer</strong></span>
+      </div>
+      <nav>
+        <a href="#analyzer">Analyzer</a>
+        <a href="#visualizer">Visualizer</a>
+        <a href="#how">How it works</a>
+        <a href="https://github.com/Mayank17OP/CDproject" target="_blank" rel="noopener">GitHub ↗</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <h1>Balanced Parentheses &amp; Brackets Analyzer</h1>
+      <p class="subtitle">Paste anything. Know instantly if your brackets are balanced — and exactly where they break.</p>
+      <div class="hero-badges">
+        <span class="pill">() [] {} &lt;&gt;</span>
+        <span class="pill">Stack O(n)</span>
+        <span class="pill">100% in-browser</span>
+        <span class="pill">No sign-up</span>
+      </div>
+    </section>
+
+    <section id="analyzer" class="card">
+      <div class="card-head">
+        <h2>Input</h2>
+        <div class="head-actions">
+          <label class="sr-only" for="exampleSel">Load example</label>
+          <select id="exampleSel" aria-label="Load example">
+            <option value="">Examples…</option>
+            <option value="balanced">Balanced: {[()]}</option>
+            <option value="unbalanced">Unbalanced: {(})</option>
+            <option value="nested">Nested expression</option>
+            <option value="code">Code snippet</option>
+            <option value="empty">Empty</option>
+          </select>
+          <button id="copyInputBtn" class="btn ghost" type="button">Copy input</button>
+          <button id="clearBtn" class="btn ghost" type="button">Clear</button>
+        </div>
+      </div>
+
+      <label class="sr-only" for="input">Text to analyze</label>
+      <textarea id="input" rows="6" spellcheck="false" placeholder="Type or paste text / code here… e.g. {[(a+b)*c]}"></textarea>
+      <div id="errorPreview" class="error-preview" style="display:none"></div>
+
+      <div class="controls">
+        <label class="toggle"><input type="checkbox" id="angleToggle" /> Include &lt;&gt; angle brackets</label>
+        <label class="toggle"><input type="checkbox" id="quotesToggle" /> Include quotes "" '' ``</label>
+        <span class="hint">Shortcut: Ctrl / ⌘ + Enter to analyze</span>
+        <button id="analyzeBtn" class="btn primary" type="button">Analyze ▶</button>
+      </div>
+    </section>
+
+    <section class="card" aria-live="polite">
+      <div class="card-head">
+        <h2>Result</h2>
+        <span id="verdict" class="verdict idle">—</span>
+      </div>
+      <p id="reason" class="reason">Paste something and hit Analyze.</p>
+      <div id="stats" class="stats"></div>
+
+      <h3>Matched pairs</h3>
+      <div id="pairs" class="chips"></div>
+
+      <h3>Unmatched</h3>
+      <p id="unmatched" class="muted"></p>
+
+      <div id="fixedWrap" style="display:none">
+        <h3>Auto-fixed version</h3>
+        <div class="fixed-row">
+          <code id="fixedText"></code>
+          <button id="copyFixedBtn" class="btn small" type="button">Copy fixed</button>
+        </div>
+      </div>
+
+      <h3>Recent history</h3>
+      <div id="historyList" class="chips"></div>
+    </section>
+
+    <section id="visualizer" class="card">
+      <div class="card-head">
+        <h2>Stack Visualizer</h2>
+        <div class="step-controls">
+          <button id="firstStep" class="btn ghost small" type="button" aria-label="First step">⏮</button>
+          <button id="prevStep" class="btn ghost small" type="button" aria-label="Previous step">◀</button>
+          <button id="playBtn" class="btn small" type="button">▶ Play</button>
+          <button id="nextStep" class="btn ghost small" type="button" aria-label="Next step">▶</button>
+          <button id="lastStep" class="btn ghost small" type="button" aria-label="Last step">⏭</button>
+        </div>
+      </div>
+
+      <input type="range" id="stepRange" min="0" max="0" value="0" aria-label="Step slider" />
+      <p id="stepInfo" class="step-info">No steps yet — run an analysis first.</p>
+
+      <div class="viz-grid">
+        <div>
+          <h3>Stack (top → bottom)</h3>
+          <div id="stackViz" class="stack-viz"><span class="stack-empty">Stack is empty</span></div>
+        </div>
+        <div class="trace-wrap">
+          <h3>Step-by-step trace</h3>
+          <table class="trace-table">
+            <thead><tr><th>#</th><th>Idx</th><th>Char</th><th>Action</th><th>Note</th><th>Stack</th></tr></thead>
+            <tbody id="traceBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="how" class="card">
+      <h2>How it works</h2>
+      <p>The analyzer uses the classic <strong>Stack</strong> algorithm in a single pass — <strong>O(n)</strong> time, <strong>O(n)</strong> space:</p>
+      <ol class="how-list">
+        <li>Read each character left to right.</li>
+        <li>If it is an <strong>opening</strong> bracket <code>( [ {</code> — push it onto the stack.</li>
+        <li>If it is a <strong>closing</strong> bracket <code>) ] }</code> — check the top of the stack: if it matches, pop it; otherwise report a mismatch.</li>
+        <li>At the end, the string is balanced only if the stack is empty.</li>
+      </ol>
+      <pre class="code-block">pairs = { ')':'(', ']':'[', '}':'{' }
+stack = []
+for ch in input:
+    if ch is opening: stack.push(ch)
+    elif ch is closing:
+        if stack.top matches ch: stack.pop()
+        else: error!
+balanced = (stack is empty)</pre>
+      <p class="muted">Optional pairs: angle brackets <code>&lt;&gt;</code> and quotes <code>"" '' ``</code> can be enabled above. Everything runs locally in your browser — no data ever leaves your device.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>Balanced Parentheses &amp; Brackets Analyzer • Built with the Stack data structure • MIT License</p>
+      <p class="muted">See <a href="PRD.md">PRD.md</a> for the full product spec • <a href="https://github.com/Mayank17OP/CDproject">Source on GitHub</a></p>
+    </div>
+  </footer>
+
+  <script src="analyzer.js"></script>
+</body>
+</html>
